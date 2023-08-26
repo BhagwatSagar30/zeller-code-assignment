@@ -1,28 +1,29 @@
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import UserType from '../Component/UserType';
 import UserList, {User} from '../Component/UserList';
-import {useQuery} from '@apollo/client';
-import {getListZellerCustomers} from '../query/getListZellerCustomers';
+import {useUserFetchDetails} from '../CustomHooks/CustomHooks';
 
 function UserDetails(): JSX.Element {
-  const [selectedRole, setSelectedRole] = useState('');
-  const [userList, setUserList] = useState([]);
-  const {loading, data} = useQuery(getListZellerCustomers);
+  const [selectedRole, setSelectedRole] = useState<string>('');
+  const [userList, setUserList] = useState<User[]>([]);
+  const [roleList, setRoleList] = useState<string[]>([]);
+  const [loading, error, data] = useUserFetchDetails();
 
   useEffect(() => {
     if (data && data?.listZellerCustomers?.items) {
       setUserList(data?.listZellerCustomers?.items);
+      const roles: string[] = [
+        ...new Set(userList?.map((user: User) => user?.role)),
+      ];
+      setRoleList(roles);
     }
-  }, [data]);
-
-  const roleList: Array<string> = [
-    ...new Set(userList?.map((user: User) => user.role)),
-  ];
+  }, [data, userList]);
 
   return (
     <View style={styles.mainView}>
       {loading && <ActivityIndicator size={30} color={'#4d94ff'} />}
+      {error && <Text>{'Something went wrong. Please try again.'} </Text>}
       <UserType
         userTypes={roleList}
         selectedRole={selectedRole}
@@ -32,7 +33,7 @@ function UserDetails(): JSX.Element {
       />
       <View style={styles.lineView} />
       <UserList
-        userList={userList?.filter((user: User) => user.role === selectedRole)}
+        userList={userList?.filter((user: User) => user?.role === selectedRole)}
         selectedRole={selectedRole}
       />
     </View>

@@ -6,15 +6,13 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import ListItem from '../Component/ListItem';
-import {User} from '../Component/UserList';
-import {useQuery} from '@apollo/react-hooks';
-import {getListZellerCustomers} from '../query/getListZellerCustomers';
+import UserList, {User} from '../Component/UserList';
+import {useUserFetchDetails} from '../CustomHooks/CustomHooks';
 
 export default function SearchUser(): JSX.Element {
-  const [search, setSearchValue] = useState('');
-  const [userList, setUserList] = useState([]);
-  const {loading, data} = useQuery(getListZellerCustomers);
+  const [search, setSearchValue] = useState<string>('');
+  const [userList, setUserList] = useState<User[]>([]);
+  const [loading, error, data] = useUserFetchDetails();
 
   useEffect(() => {
     if (data && data?.listZellerCustomers?.items) {
@@ -22,14 +20,10 @@ export default function SearchUser(): JSX.Element {
     }
   }, [data]);
 
-  const filterList = (list: User[]) => {
-    return list.filter(listItem =>
-      listItem.name.toLowerCase().includes(search.toLowerCase()),
-    );
-  };
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator size={30} color={'#4d94ff'} />}
+      {error && <Text>{'Something went wrong. Please try again.'} </Text>}
       <TextInput
         onChangeText={(value: string) => {
           setSearchValue(value);
@@ -37,10 +31,12 @@ export default function SearchUser(): JSX.Element {
         style={styles.searchBar}
       />
 
-      <Text style={styles.userTypeTitle}>{'User List'}</Text>
-      {filterList(userList).map(user => {
-        return <ListItem item={user} />;
-      })}
+      <UserList
+        userList={userList?.filter((user: User) =>
+          user?.name?.toLowerCase().includes(search?.toLowerCase()),
+        )}
+        selectedRole={''}
+      />
     </View>
   );
 }

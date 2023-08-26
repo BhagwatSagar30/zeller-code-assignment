@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useCallback} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 interface UserTypeProps {
@@ -8,9 +8,14 @@ interface UserTypeProps {
 }
 const UserType: React.FC<UserTypeProps> = props => {
   const {userTypes, selectedRole, setSelectedRole} = props;
-  const onRadioButtonClick = (role: string) => {
-    setSelectedRole(role);
-  };
+
+  const onRadioButtonClick = useCallback(
+    (role: string) => {
+      setSelectedRole(role);
+    },
+    [setSelectedRole],
+  );
+
   return (
     <View style={styles.mainView}>
       <Text style={styles.userTypeTitle}>{'User Type'}</Text>

@@ -1,12 +1,12 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {memo} from 'react';
 import {User} from './UserList';
 
 interface Props {
   item: User;
 }
 
-const ListItem = (props: Props) => {
+const ListItem = memo((props: Props) => {
   const {item} = props;
   return (
     <View key={item?.id} style={styles.listView}>
@@ -19,7 +19,7 @@ const ListItem = (props: Props) => {
       </View>
     </View>
   );
-};
+});
 
 export default ListItem;
 

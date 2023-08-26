@@ -8,10 +8,10 @@ export interface User {
   email: string;
   role: string;
 }
-interface UserDetailsProps {
+type UserDetailsProps = {
   userList: User[];
-  selectedRole: string;
-}
+  selectedRole: string | undefined;
+};
 
 const UserList: React.FC<UserDetailsProps> = props => {
   const {selectedRole, userList} = props;
@@ -26,7 +26,9 @@ const UserList: React.FC<UserDetailsProps> = props => {
 
   return (
     <SafeAreaView style={styles.mainView}>
-      <Text style={styles.userTypeTitle}>{selectedRole + ' Users'}</Text>
+      <Text style={styles.userTypeTitle}>
+        {selectedRole ? selectedRole + ' Users' : ' Users List'}
+      </Text>
       <FlatList
         data={userList}
         renderItem={renderItem}
