@@ -1,5 +1,5 @@
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import UserType from '../Component/UserType';
 import UserList, {User} from '../Component/UserList';
 import {useUserFetchDetails} from '../CustomHooks/CustomHooks';
@@ -20,6 +20,13 @@ function UserDetails(): JSX.Element {
     }
   }, [data, userList]);
 
+  const onRoleSelection = useCallback(
+    (role: string) => {
+      setSelectedRole(role);
+    },
+    [setSelectedRole],
+  );
+
   return (
     <View style={styles.mainView}>
       {loading && <ActivityIndicator size={30} color={'#4d94ff'} />}
@@ -27,9 +34,7 @@ function UserDetails(): JSX.Element {
       <UserType
         userTypes={roleList}
         selectedRole={selectedRole}
-        setSelectedRole={(role: string) => {
-          setSelectedRole(role);
-        }}
+        setSelectedRole={onRoleSelection}
       />
       <View style={styles.lineView} />
       <UserList

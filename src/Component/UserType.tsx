@@ -9,12 +9,9 @@ interface UserTypeProps {
 const UserType: React.FC<UserTypeProps> = props => {
   const {userTypes, selectedRole, setSelectedRole} = props;
 
-  const onRadioButtonClick = useCallback(
-    (role: string) => {
-      setSelectedRole(role);
-    },
-    [setSelectedRole],
-  );
+  const onRadioButtonClick = (role: string) => {
+    setSelectedRole(role);
+  };
 
   return (
     <View style={styles.mainView}>
