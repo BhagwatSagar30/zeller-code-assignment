@@ -1,14 +1,14 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {render, screen, fireEvent} from '@testing-library/react-native';
-import BottomNavigationTabs from '../src/navigation/BottomNavigationTabs';
+import {render} from '@testing-library/react-native';
 import ErrorBoundary from 'react-native-error-boundary';
-import CustomFallback from '../src/Component/ErrrorBoundary';
+import ErrorFallback from '../../Component/ErrrorBoundary';
+import BottomNavigationTabs from '../BottomNavigationTabs';
 
 describe('Testing react navigation', () => {
   test('screen contains a Text', async () => {
     const component = (
-      <ErrorBoundary FallbackComponent={CustomFallback}>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
         <NavigationContainer>
           <BottomNavigationTabs />
         </NavigationContainer>
@@ -16,11 +16,5 @@ describe('Testing react navigation', () => {
     );
 
     render(component).toJSON;
-
-    // render(component);
   });
 });
-
-// it('Tab tests', () => {
-//   render(<BottomNavigationTabs />).toJSON;
-// });

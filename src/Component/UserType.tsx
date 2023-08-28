@@ -19,6 +19,7 @@ const UserType: React.FC<UserTypeProps> = props => {
       {userTypes?.map((role: string) => {
         return (
           <TouchableOpacity
+            testID="selectRoleRadioButton"
             style={[
               styles.radioButtonView,
               role === selectedRole
