@@ -5,13 +5,28 @@
 import 'react-native';
 import React from 'react';
 import App from '../App';
+import {render, screen, userEvent} from '@testing-library/react-native';
+
+jest.useFakeTimers();
 
 // Note: import explicitly to use the types shiped with jest.
-import {it} from '@jest/globals';
+import {it, test, expect} from '@jest/globals';
+import SearchUser from '../src/Container/SearchUser';
+import UserDetails from '../src/Container/UserDetails';
 
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
+test('renders correctly', () => {
+  render(<App />);
+  expect(screen.getByRole('header', {name: 'User Details'})).toBeDefined();
+});
 
-it('renders correctly', () => {
-  renderer.create(<App />);
+test('renders correctly User details', () => {
+  render(<UserDetails />);
+  expect(screen.getByText('User Type')).toBeDefined();
+  expect(screen.getByText('Users List')).toBeDefined();
+});
+
+test('renders correctly Search Users', () => {
+  render(<SearchUser />);
+  expect(screen.getByText('Users List')).toBeDefined();
+  expect(screen.getByText('No Users to display')).toBeDefined();
 });
