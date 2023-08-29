@@ -1,6 +1,7 @@
 import React, {memo} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
 import ListItem from './ListItem';
+import ListEmptyComponent from './ListEmptyComponent';
 
 export interface User {
   id: string;
@@ -16,9 +17,7 @@ type UserDetailsProps = {
 const UserList: React.FC<UserDetailsProps> = props => {
   const {selectedRole, userList} = props;
 
-  const listEmptyComponent = () => {
-    return <Text style={styles.emptyListText}>{'No Users to display'}</Text>;
-  };
+  const listEmptyComponent = () => <ListEmptyComponent />;
 
   const renderItem = ({item}: {item: User}) => {
     return <ListItem item={item} />;

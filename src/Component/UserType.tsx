@@ -1,5 +1,6 @@
-import React, {memo, useCallback} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {memo} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import ListEmptyComponent from './ListEmptyComponent';
 
 interface UserTypeProps {
   userTypes: string[];
@@ -13,30 +14,39 @@ const UserType: React.FC<UserTypeProps> = props => {
     setSelectedRole(role);
   };
 
+  const listEmptyComponent = () => <ListEmptyComponent />;
+
+  const renderListItem = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        testID={'selectRoleRadioButton' + index}
+        style={[
+          styles.radioButtonView,
+          item === selectedRole
+            ? styles.selectedButtonBG
+            : styles.unSelectedButtonBG,
+        ]}
+        key={item}
+        onPress={() => onRadioButtonClick(item)}>
+        <View style={styles.radioButtonOuterCircle}>
+          {item === selectedRole ? (
+            <View style={styles.radioButtonInnerCircle} />
+          ) : null}
+        </View>
+        <Text style={styles.radioButtonLabel}>{item}</Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.mainView}>
       <Text style={styles.userTypeTitle}>{'User Type'}</Text>
-      {userTypes?.map((role: string) => {
-        return (
-          <TouchableOpacity
-            testID="selectRoleRadioButton"
-            style={[
-              styles.radioButtonView,
-              role === selectedRole
-                ? styles.selectedButtonBG
-                : styles.unSelectedButtonBG,
-            ]}
-            key={role}
-            onPress={() => onRadioButtonClick(role)}>
-            <View style={styles.radioButtonOuterCircle}>
-              {role === selectedRole ? (
-                <View style={styles.radioButtonInnerCircle} />
-              ) : null}
-            </View>
-            <Text style={styles.radioButtonLabel}>{role}</Text>
-          </TouchableOpacity>
-        );
-      })}
+      <FlatList
+        data={userTypes}
+        renderItem={renderListItem}
+        ListEmptyComponent={listEmptyComponent}
+        keyExtractor={(user, index) => index + user}
+      />
     </View>
   );
 };

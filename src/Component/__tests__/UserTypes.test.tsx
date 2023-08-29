@@ -1,11 +1,6 @@
 import 'react-native';
 import React from 'react';
-import {
-  fireEvent,
-  render,
-  screen,
-  userEvent,
-} from '@testing-library/react-native';
+import {fireEvent, render, screen} from '@testing-library/react-native';
 
 jest.useFakeTimers();
 
@@ -15,17 +10,20 @@ import UserType from '../UserType';
 
 test('renders correctly User Type', async () => {
   const mockHandleClick = jest.fn();
+  const mockData = ['Manager', 'Admin'];
   render(
     <UserType
-      userTypes={['Manager', 'Admin']}
+      userTypes={mockData}
       selectedRole={'Manager'}
       setSelectedRole={mockHandleClick}
     />,
   );
-  //screen.getAllByTestId('selectRoleRadioButton')
-  await fireEvent.press(screen.getByTestId('selectRoleRadioButton'));
-  expect(mockHandleClick).toHaveBeenCalled();
+
   expect(screen.getByText('User Type')).toBeDefined();
+  fireEvent(screen.getByTestId('selectRoleRadioButton0'), 'press');
+  expect(mockHandleClick).toHaveBeenCalled();
   expect(screen.getByText('Manager')).toBeDefined();
+  fireEvent(screen.getByTestId('selectRoleRadioButton1'), 'press');
+  expect(mockHandleClick).toHaveBeenCalled();
   expect(screen.getByText('Admin')).toBeDefined();
 });
